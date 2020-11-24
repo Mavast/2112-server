@@ -30,7 +30,12 @@ const eventTemplates = [
         type: "get_planets",
         run: (ws, db) => {
             db.query(`SELECT * FROM planets`, (err, results, fields) => {
-                ws.send(JSON.stringify(results));
+                ws.send(
+                    JSON.stringify({
+                        type: "planets",
+                        results: results,
+                    })
+                );
             });
         },
     },
