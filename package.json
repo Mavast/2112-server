@@ -1,0 +1,30 @@
+{
+    "name": "2112-server",
+    "version": "1.0.0",
+    "description": "",
+    "main": "server.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "start": "node server.js",
+        "devStart": "nodemon server.js"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/Mavast/2112-server.git"
+    },
+    "author": "",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/Mavast/2112-server/issues"
+    },
+    "homepage": "https://github.com/Mavast/2112-server#readme",
+    "dependencies": {
+        "bcrypt": "^5.0.0",
+        "chalk": "^4.1.0",
+        "enmap": "^5.8.2",
+        "mysql": "^2.18.1"
+    },
+    "devDependencies": {
+        "nodemon": "^2.0.6"
+    }
+}
