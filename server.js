@@ -4,25 +4,7 @@ const chalk = require("chalk");
 const path = require("path");
 const fs = require("fs");
 const Enmap = require("enmap");
-
-//Load WS Events
-const events = new Enmap();
-const eventPath = path.join(__dirname, "events");
-
-fs.readdir(eventPath, function (err, files) {
-    //handling error
-    if (err) {
-        return console.log("Unable to scan directory: " + err);
-    }
-    //listing all files using forEach
-    files.forEach(function (file) {
-        if (!file.endsWith(".js")) return;
-        let props = require(`./commands/${file}`);
-        let eventName = file.split(".")[0];
-        console.log(`Attempting to load WS event ${eventName}`);
-        events.set(commandName, props);
-    });
-});
+const config = require("./config.json");
 
 const WebSocket = require("ws");
 
@@ -37,15 +19,52 @@ const ws = new WebSocket.Server({ port: WS_PORT });
 const DB = require("./utils/database.js");
 const db = new DB();
 
+const eventTemplates = [
+    {
+        type: "ping",
+        run: (ws, db) => {
+            ws.send("Pong!");
+        },
+    },
+    {
+        type: "get_planets",
+        run: (ws, db) => {
+            db.query(`SELECT * FROM planets`, (err, results, fields) => {
+                ws.send(JSON.stringify(results));
+            });
+        },
+    },
+];
+
+const events = [];
+
+eventTemplates.forEach((template) => {
+    events.push(template);
+});
+
+// db.generateWorld(config.world_options);
+
+const isJsonString = (str) => {
+    try {
+        JSON.parse(str);
+    } catch (e) {
+        return false;
+    }
+    return true;
+};
+
 ws.on("connection", function connection(ws) {
     ws.on("message", function incoming(message) {
         //Parse message
-        const parsed = JSON.parse(message);
-        //loop through all events to find if it applies
-        const event = events.get(parsed.event);
-        if (!event) return;
-
-        ws.send(event.run(parsed.data));
+        if (isJsonString(message)) {
+            const parsed = JSON.parse(message);
+            //loop through all events to find if it applies
+            events.forEach((event) => {
+                if (event.type === parsed.event) {
+                    event.run(ws, db);
+                }
+            });
+        }
     });
 });
 

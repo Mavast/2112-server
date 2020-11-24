@@ -1,6 +1,7 @@
 const mysql = require("mysql");
 const secret = require("../secret.json");
 const bcrypt = require("bcrypt");
+const chalk = require("chalk");
 const saltRounds = 10;
 
 class Database {
@@ -15,6 +16,34 @@ class Database {
 
     query(query, callback) {
         this.connection.query(query, callback);
+    }
+
+    //Should only be run once to reset the world, this generates random planets etc.
+    generateWorld(options) {
+        console.log(chalk.yellow("[Database]") + " attempting to generate planets...");
+        //reset database
+        this.query(`DROP TABLE planets`, (err, results, fields) => {
+            if (err) throw err;
+        });
+        this.query(`CREATE TABLE planets (x INT, y INT)`, (err, results, fields) => {
+            if (err) throw err;
+        });
+
+        const width = options.width;
+        const height = options.height;
+        const planets = options.planets;
+
+        for (let i = 0; i < planets; i++) {
+            let planet = {
+                x: Math.floor(Math.random() * width),
+                y: Math.floor(Math.random() * height),
+            };
+            this.query(`INSERT INTO planets (x, y) VALUES (${planet.x}, ${planet.y})`, (err, results, fields) => {
+                if (err) throw err;
+            });
+        }
+
+        console.log(chalk.green("[Database]") + " generated planets");
     }
 
     //Has to be called whenever someone registers an account
