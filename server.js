@@ -19,13 +19,13 @@ const db = new DB();
 const eventTemplates = [
     {
         type: "ping",
-        run: (ws, db) => {
+        run: () => {
             ws.send("Pong!");
         },
     },
     {
         type: "get_queue",
-        run: (ws, db) => {
+        run: () => {
             db.query(`SELECT * FROM chunks`, (err, results, fields) => {
                 console.log(`get_queue chunks: ${results}`);
                 ws.send(
@@ -65,7 +65,7 @@ ws.on("connection", function connection(ws) {
             //loop through all events to find if it applies
             events.forEach((event) => {
                 if (event.type === parsed.type) {
-                    event.run(ws, db);
+                    event.run();
                 }
             });
         }
