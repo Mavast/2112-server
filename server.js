@@ -31,16 +31,16 @@ const eventTemplates = [
                 const toRender = [];
                 //check if the chunk is close enough to the player to be rendered
                 const chunkPos = {
-                    chunk_x = (data.x - (data.x % config.world_options.chunkWidth)) / config.world_options.chunkWidth,
-                    chunk_y = (data.y - (data.y % config.world_options.chunkHeight)) / config.world_options.chunkHeight
-                }
+                    chunk_x: (data.x - (data.x % config.world_options.chunkWidth)) / config.world_options.chunkWidth,
+                    chunk_y: (data.y - (data.y % config.world_options.chunkHeight)) / config.world_options.chunkHeight,
+                };
 
-                results.forEach((chunk)=>{
-                    if (chunk.x = chunkPos.chunk_x && chunk.y = chunkPos.chunk_y) {
+                results.forEach((chunk) => {
+                    if ((chunk.x = chunkPos.chunk_x && chunk.y = chunkPos.chunk_y)) {
                         toRender.push(chunk);
                     }
-                })
-                
+                });
+
                 ws.send(
                     JSON.stringify({
                         type: "render_queue",
