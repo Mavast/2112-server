@@ -60,9 +60,10 @@ ws.on("connection", function connection(ws) {
         //Parse message
         if (isJsonString(message)) {
             const parsed = JSON.parse(message);
+            console.log("Attempting to run event: " + parsed.type);
             //loop through all events to find if it applies
             events.forEach((event) => {
-                if (event.type === parsed.event) {
+                if (event.type === parsed.type) {
                     event.run(ws, db);
                 }
             });
