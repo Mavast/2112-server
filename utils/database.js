@@ -20,42 +20,24 @@ class Database {
 
     //Should only be run once to reset the world, this generates random planets etc.
     generateWorld(options) {
-        console.log(chalk.yellow("[Database]") + " attempting to generate chunks...");
+        console.log(chalk.yellow("[Database]") + " attempting to generate planets...");
         //reset database
-        this.query(`DROP TABLE chunks`, (err, results, fields) => {
+        this.query(`DROP TABLE planets`, (err, results, fields) => {
             if (err) throw err;
         });
-        this.query(
-            `CREATE TABLE chunks (x INT, y INT, width INT, height INT, planet BOOLEAN, planet_x INT, planet_y INT)`,
-            (err, results, fields) => {
+        this.query(`CREATE TABLE planets (x INT, y INT)`, (err, results, fields) => {
+            if (err) throw err;
+        });
+
+        for (let i = 0; i < 5000; i++) {
+            const planet = {
+                x: Math.floor(Math.random() * options.worldWidth),
+                y: Math.floor(Math.random() * options.worldHeight),
+            };
+
+            this.query(`INSERT INTO planets (x, y) VALUES (${planet.x}, ${planet.y})`, (err, results, fields) => {
                 if (err) throw err;
-            }
-        );
-
-        for (let x = 0; x < options.horizontal_chunks; x++) {
-            for (let y = 0; y < options.vertical_chunks; y++) {
-                let planet = false;
-                if (Math.random() > 0.65) {
-                    planet = true;
-                }
-
-                let chunk = {
-                    x: x,
-                    y: y,
-                    width: options.chunkWidth,
-                    height: options.chunkHeight,
-                    planet: planet,
-                    planet_x: Math.floor(Math.random() * options.chunkWidth),
-                    planet_y: Math.floor(Math.random() * options.chunkHeight),
-                };
-
-                this.query(
-                    `INSERT INTO chunks (x, y, width, height, planet, planet_x, planet_y) VALUES (${chunk.x}, ${chunk.y}, ${chunk.width}, ${chunk.height}, ${chunk.planet}, ${chunk.planet_x}, ${chunk.planet_y})`,
-                    (err, results, fields) => {
-                        if (err) throw err;
-                    }
-                );
-            }
+            });
         }
 
         console.log(chalk.green("[Database]") + " generated planets");

@@ -58,8 +58,6 @@ eventTemplates.forEach((template) => {
     events.push(template);
 });
 
-// db.generateWorld(config.world_options);
-
 const isJsonString = (str) => {
     try {
         JSON.parse(str);
@@ -97,6 +95,15 @@ app.get("/planets", (req, res) => {
             planets: planets,
         });
     });
+});
+
+app.get("/generate/:key", (req, res) => {
+    if (req.params.key == secret.key) {
+        db.generateWorld(config.world_options);
+        res.sendStatus(200);
+    } else {
+        res.sendStatus(403);
+    }
 });
 
 app.post("/register", (req, res) => {

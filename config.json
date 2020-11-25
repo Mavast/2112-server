@@ -1,8 +1,6 @@
 {
     "world_options": {
-        "horizontal_chunks": 250,
-        "vertical_chunks": 250,
-        "chunkWidth": 1000,
-        "chunkHeight": 1000
+        "worldWidth": 250000,
+        "worldHeight": 250000
     }
 }
