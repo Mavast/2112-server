@@ -78,7 +78,7 @@ ws.on("connection", function connection(ws) {
             //loop through all events to find if it applies
             events.forEach((event) => {
                 if (event.type === parsed.type) {
-                    event.run(ws);
+                    event.run(ws, parsed.data);
                 }
             });
         }
