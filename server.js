@@ -96,7 +96,7 @@ app.get("/planets", (req, res) => {
     db.query(`SELECT * FROM planets`, (err, results, fields) => {
         if (err) console.error(err);
         res.send({
-            planets: planets,
+            planets: results,
         });
     });
 });
