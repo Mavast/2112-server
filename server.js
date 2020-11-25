@@ -27,6 +27,7 @@ const eventTemplates = [
         type: "get_queue",
         run: (ws, db) => {
             db.query(`SELECT * FROM chunks`, (err, results, fields) => {
+                console.log(`get_queue chunks: ${results}`);
                 ws.send(
                     JSON.stringify({
                         type: "render_queue",
