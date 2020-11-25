@@ -27,13 +27,13 @@ const eventTemplates = [
         },
     },
     {
-        type: "get_planets",
+        type: "get_queue",
         run: (ws, db) => {
-            db.query(`SELECT * FROM planets`, (err, results, fields) => {
+            db.query(`SELECT * FROM chunks`, (err, results, fields) => {
                 ws.send(
                     JSON.stringify({
-                        type: "planets",
-                        results: results,
+                        type: "render_queue",
+                        data: results,
                     })
                 );
             });
