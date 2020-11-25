@@ -8,6 +8,9 @@ const WebSocket = require("ws");
 const app = express();
 app.use(bodyParser.json());
 
+var cors = require("cors");
+app.use(cors());
+
 const API_PORT = process.env.API_PORT || 3000;
 const WS_PORT = process.env.WS_PORT || 7777;
 
