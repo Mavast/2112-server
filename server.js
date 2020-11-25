@@ -19,15 +19,15 @@ const db = new DB();
 const eventTemplates = [
     {
         type: "ping",
-        run: () => {
+        run: (ws) => {
             ws.send("Pong!");
         },
     },
     {
         type: "get_queue",
-        run: () => {
+        run: (ws) => {
             db.query(`SELECT * FROM chunks`, (err, results, fields) => {
-                console.log(`get_queue chunks: ${results}`);
+                // console.log(`get_queue chunks: ${results}`);
                 ws.send(
                     JSON.stringify({
                         type: "render_queue",
@@ -45,7 +45,7 @@ eventTemplates.forEach((template) => {
     events.push(template);
 });
 
-db.generateWorld(config.world_options);
+// db.generateWorld(config.world_options);
 
 const isJsonString = (str) => {
     try {
@@ -65,7 +65,7 @@ ws.on("connection", function connection(ws) {
             //loop through all events to find if it applies
             events.forEach((event) => {
                 if (event.type === parsed.type) {
-                    event.run();
+                    event.run(ws);
                 }
             });
         }
