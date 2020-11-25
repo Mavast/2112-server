@@ -36,7 +36,7 @@ const eventTemplates = [
                 };
 
                 results.forEach((chunk) => {
-                    if ((chunk.x = chunkPos.chunk_x && chunk.y = chunkPos.chunk_y)) {
+                    if (chunk.x == chunkPos.chunk_x && chunk.y == chunkPos.chunk_y) {
                         toRender.push(chunk);
                     }
                 });
