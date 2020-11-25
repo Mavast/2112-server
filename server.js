@@ -1,8 +1,6 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const chalk = require("chalk");
-const path = require("path");
-const fs = require("fs");
 const config = require("./config.json");
 
 const WebSocket = require("ws");
