@@ -47,7 +47,7 @@ eventTemplates.forEach((template) => {
     events.push(template);
 });
 
-// db.generateWorld(config.world_options);
+db.generateWorld(config.world_options);
 
 const isJsonString = (str) => {
     try {

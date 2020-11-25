@@ -1,7 +1,8 @@
 {
     "world_options": {
-        "width": 250000,
-        "height": 250000,
-        "planets": 1250
+        "horizontal_chunks": 250,
+        "vertical_chunks": 250,
+        "chunkWidth": 1000,
+        "chunkHeight": 1000
     }
 }
