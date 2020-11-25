@@ -89,6 +89,16 @@ app.get("/", (req, res) => {
     res.sendStatus(200);
 });
 
+app.get("/planets", (req, res) => {
+    console.log(chalk.yellow("[API Server]") + " received planets request. ");
+    db.query(`SELECT * FROM planets`, (err, results, fields) => {
+        if (err) console.error(err);
+        res.send({
+            planets: planets,
+        });
+    });
+});
+
 app.post("/register", (req, res) => {
     console.log(
         chalk.yellow("[API Server]") + " received registration request. " + chalk.magenta("User: " + req.body.username)
