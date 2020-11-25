@@ -2,6 +2,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const chalk = require("chalk");
 const config = require("./config.json");
+const secret = require("./secret.json");
 
 const WebSocket = require("ws");
 
