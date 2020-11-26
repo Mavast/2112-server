@@ -107,29 +107,33 @@ io.on("connection", (socket) => {
     });
 
     socket.on("position", (data) => {
-        connected.forEach((connection) => {
-            if (connection.socket == socket) {
-                connection.pos = {
-                    x: data.x,
-                    y: data.y,
-                };
-                connection.angle = data.angle;
-            }
-        });
+        if (db.auth(data.USERNAME, data.AUTHKEY)) {
+            connected.forEach((connection) => {
+                if (connection.socket == socket) {
+                    connection.pos = {
+                        x: data.x,
+                        y: data.y,
+                    };
+                    connection.angle = data.angle;
+                }
+            });
+        }
     });
 
     socket.on("get_players", () => {
-        const players = [];
-        connected.forEach((connection) => {
-            if (connection.socket != socket) {
-                players.push({
-                    x: connection.pos.x,
-                    y: connection.pos.y,
-                    angle: connection.angle,
-                });
-            }
-        });
+        if (db.auth(data.USERNAME, data.AUTHKEY)) {
+            const players = [];
+            connected.forEach((connection) => {
+                if (connection.socket != socket) {
+                    players.push({
+                        x: connection.pos.x,
+                        y: connection.pos.y,
+                        angle: connection.angle,
+                    });
+                }
+            });
 
-        socket.emit("players", players);
+            socket.emit("players", players);
+        }
     });
 });
