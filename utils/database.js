@@ -39,6 +39,8 @@ class Database {
                 size: Math.random() * 8,
             };
 
+            let dist = 0;
+
             if (planets.length) {
                 let a = planets[i - 1].x - planet.x;
                 let b = planets[i - 1].y - planet.y;
