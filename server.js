@@ -99,7 +99,11 @@ io.on("connection", (socket) => {
     });
 
     socket.on("disconnect", () => {
-        connected.splice(connected.indexOf(socket), 1);
+        for (let i = connected.length - 1; i >= 0; i--) {
+            if (connected[i].socket == socket) {
+                connected.splice(i, 1);
+            }
+        }
     });
 
     socket.on("position", (data) => {
