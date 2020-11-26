@@ -85,6 +85,21 @@ var io = require("socket.io")(server, {
     },
 });
 
+const connected = [];
+
 io.on("connection", (socket) => {
-    console.log("a user connected");
+    connected.push({
+        socket: socket,
+        pos: {
+            x: 0,
+            y: 0,
+        },
+    });
+    socket.on("disconnect", () => {
+        connected.splice(connected.indexOf(socket), 1);
+    });
+
+    socket.on("position", (pos) => {
+        connected[connected.indexOf(socket)].pos = pos;
+    });
 });
