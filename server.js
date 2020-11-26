@@ -95,16 +95,21 @@ io.on("connection", (socket) => {
             x: 0,
             y: 0,
         },
+        angle: 0,
     });
 
     socket.on("disconnect", () => {
         connected.splice(connected.indexOf(socket), 1);
     });
 
-    socket.on("position", (pos) => {
+    socket.on("position", (data) => {
         connected.forEach((connection) => {
             if (connection.socket == socket) {
-                connection.pos = pos;
+                connection.pos = {
+                    x: data.x,
+                    y: data.y,
+                };
+                connection.angle = data.angle;
             }
         });
     });
