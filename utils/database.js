@@ -114,7 +114,7 @@ class Database {
             // console.log("AUTH REQUEST: " + raw);
 
             let parsed = JSON.parse(raw);
-            if (parsed == authkey) {
+            if (parsed.auth_token == authkey) {
                 return true;
             } else {
                 return false;
