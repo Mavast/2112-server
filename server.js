@@ -66,8 +66,8 @@ io.on("connection", (socket) => {
     connected.push({
         id: socket.id,
         pos: {
-            x: 0,
-            y: 0,
+            x: config.world_options.worldWidth / 2,
+            y: config.world_options.worldHeight / 2,
         },
         angle: 0,
         username: "Logging in...",
