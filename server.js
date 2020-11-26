@@ -121,11 +121,20 @@ io.on("connection", (socket) => {
             if (auth) {
                 connected.forEach((connection) => {
                     if (connection.id == socket.id) {
-                        connection.pos = {
-                            x: data.x,
-                            y: data.y,
-                        };
-                        connection.angle = data.angle;
+                        //check if new position isn't too far from old position
+                        let a = x1 - x2;
+                        let b = y1 - y2;
+
+                        let dist = Math.sqrt(a * a + b * b);
+                        if (dist < 50) {
+                            connection.pos = {
+                                x: data.x,
+                                y: data.y,
+                            };
+                            connection.angle = data.angle;
+                        } else {
+                            socket.emit("error", "Position has changed too much since last ping.");
+                        }
                     }
                 });
             }
