@@ -121,7 +121,7 @@ io.on("connection", (socket) => {
         }
     });
 
-    socket.on("get_players", () => {
+    socket.on("get_players", (data) => {
         if (db.auth(data.USERNAME, data.AUTHKEY)) {
             const players = [];
             connected.forEach((connection) => {
