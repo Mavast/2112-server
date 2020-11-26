@@ -122,10 +122,10 @@ io.on("connection", (socket) => {
                 connected.forEach((connection) => {
                     if (connection.id == socket.id) {
                         //check if new position isn't too far from old position
-                        let a = x1 - x2;
-                        let b = y1 - y2;
+                        let a = connection.pos.x - data.x;
+                        let b = connection.pos.y - data.y;
 
-                        let dist = Math.sqrt(a * a + b * b);
+                        let dist = Math.abs(Math.sqrt(a * a + b * b));
                         if (dist < 50) {
                             connection.pos = {
                                 x: data.x,
