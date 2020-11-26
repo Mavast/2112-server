@@ -31,30 +31,13 @@ class Database {
 
         let planets = [];
 
-        for (let i = 0; i < 5000; i++) {
+        for (let i = 0; i < 1500; i++) {
             const planet = {
                 x: Math.floor(Math.random() * options.worldWidth),
                 y: Math.floor(Math.random() * options.worldHeight),
                 texture: Math.floor(Math.random() * 10),
                 size: Math.random() * 8,
             };
-
-            let dist = 0;
-
-            if (planets.length) {
-                let a = planets[i - 1].x - planet.x;
-                let b = planets[i - 1].y - planet.y;
-
-                dist = Math.sqrt(a * a + b * b);
-            }
-
-            if (dist >= 1500) {
-                planets.push(planet);
-            }
-        }
-
-        for (let i = planets.length - 1; i >= 0; i--) {
-            let planet = planets[i];
 
             this.query(
                 `INSERT INTO planets (x, y, texture, size) VALUES (${planet.x}, ${planet.y}, ${planet.texture}, ${planet.size})`,
