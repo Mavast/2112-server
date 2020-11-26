@@ -29,6 +29,8 @@ class Database {
             if (err) throw err;
         });
 
+        let planets = [];
+
         for (let i = 0; i < 5000; i++) {
             const planet = {
                 x: Math.floor(Math.random() * options.worldWidth),
@@ -37,12 +39,21 @@ class Database {
                 size: Math.random() * 20,
             };
 
-            this.query(
-                `INSERT INTO planets (x, y, texture, size) VALUES (${planet.x}, ${planet.y}, ${planet.texture}, ${planet.size})`,
-                (err, results, fields) => {
-                    if (err) throw err;
-                }
-            );
+            planets.push(planet);
+
+            let a = planets[i - 1].x - planet.x;
+            let b = planets[i - 1].y - planet.y;
+
+            let dist = Math.abs(Math.sqrt(a * a + b * b));
+
+            if (dist >= 1000) {
+                this.query(
+                    `INSERT INTO planets (x, y, texture, size) VALUES (${planet.x}, ${planet.y}, ${planet.texture}, ${planet.size})`,
+                    (err, results, fields) => {
+                        if (err) throw err;
+                    }
+                );
+            }
         }
 
         console.log(chalk.green("[Database]") + " generated planets");
