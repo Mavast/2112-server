@@ -36,7 +36,7 @@ class Database {
                 x: Math.floor(Math.random() * options.worldWidth),
                 y: Math.floor(Math.random() * options.worldHeight),
                 texture: Math.floor(Math.random() * 10),
-                size: Math.random() * 20,
+                size: Math.random() * 8,
             };
 
             planets.push(planet);
@@ -49,7 +49,7 @@ class Database {
                 dist = Math.abs(Math.sqrt(a * a + b * b));
             }
 
-            if (dist >= 4500) {
+            if (dist >= 15000) {
                 this.query(
                     `INSERT INTO planets (x, y, texture, size) VALUES (${planet.x}, ${planet.y}, ${planet.texture}, ${planet.size})`,
                     (err, results, fields) => {
