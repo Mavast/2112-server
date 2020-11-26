@@ -25,7 +25,7 @@ class Database {
         this.query(`DROP TABLE planets`, (err, results, fields) => {
             if (err) throw err;
         });
-        this.query(`CREATE TABLE planets (x INT, y INT)`, (err, results, fields) => {
+        this.query(`CREATE TABLE planets (x INT, y INT, texture INT)`, (err, results, fields) => {
             if (err) throw err;
         });
 
@@ -33,6 +33,7 @@ class Database {
             const planet = {
                 x: Math.floor(Math.random() * options.worldWidth),
                 y: Math.floor(Math.random() * options.worldHeight),
+                texture: Math.floor(Math.random() * 10),
             };
 
             this.query(`INSERT INTO planets (x, y) VALUES (${planet.x}, ${planet.y})`, (err, results, fields) => {
@@ -57,7 +58,7 @@ class Database {
                         callback(false, "Error, try a different username!");
                     } else {
                         console.log("Registered new user: " + username + " (ID: " + results.insertId + ")");
-                        callback(true, "Succesfully registered!");
+                        callback(true, "Successfully registered!");
                     }
                 }
             );
