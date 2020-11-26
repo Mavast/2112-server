@@ -40,11 +40,14 @@ class Database {
             };
 
             planets.push(planet);
+            let dist = 1500;
 
-            let a = planets[i - 1].x - planet.x;
-            let b = planets[i - 1].y - planet.y;
+            if (i > 0) {
+                let a = planets[i - 1].x - planet.x;
+                let b = planets[i - 1].y - planet.y;
 
-            let dist = Math.abs(Math.sqrt(a * a + b * b));
+                dist = Math.abs(Math.sqrt(a * a + b * b));
+            }
 
             if (dist >= 1000) {
                 this.query(
