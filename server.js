@@ -106,4 +106,8 @@ io.on("connection", (socket) => {
             }
         });
     });
+
+    socket.on("get_players", () => {
+        socket.emit("players", connected);
+    });
 });
