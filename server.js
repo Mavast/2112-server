@@ -134,6 +134,8 @@ io.on("connection", (socket) => {
                 }
             });
 
+            console.log("Players: " + JSON.stringify(players));
+
             socket.emit("players", players);
         }
     });
