@@ -111,7 +111,7 @@ class Database {
         this.query(`SELECT auth_token FROM users WHERE username = '${uname}'`, (err, results, fields) => {
             if (err) console.error(err);
             let raw = JSON.stringify(results[0]);
-            console.log("AUTH REQUEST: " + raw);
+            // console.log("AUTH REQUEST: " + raw);
 
             let parsed = JSON.parse(raw);
             if (parsed == authkey) {

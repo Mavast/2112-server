@@ -64,7 +64,7 @@ const players = [];
 
 io.on("connection", (socket) => {
     connected.push({
-        socket: socket,
+        id: socket.id,
         pos: {
             x: 0,
             y: 0,
@@ -74,7 +74,7 @@ io.on("connection", (socket) => {
 
     socket.on("disconnect", () => {
         for (let i = connected.length - 1; i >= 0; i--) {
-            if (connected[i].socket == socket) {
+            if (connected[i].id == socket.id) {
                 connected.splice(i, 1);
             }
         }
@@ -110,7 +110,7 @@ io.on("connection", (socket) => {
     socket.on("position", (data) => {
         if (db.auth(data.USERNAME, data.AUTHKEY)) {
             connected.forEach((connection) => {
-                if (connection.socket == socket) {
+                if (connection.id == socket.id) {
                     connection.pos = {
                         x: data.x,
                         y: data.y,
@@ -125,7 +125,7 @@ io.on("connection", (socket) => {
         if (db.auth(data.USERNAME, data.AUTHKEY)) {
             const players = [];
             connected.forEach((connection) => {
-                if (connection.socket != socket) {
+                if (connection.id != socket.id) {
                     players.push({
                         x: connection.pos.x,
                         y: connection.pos.y,
