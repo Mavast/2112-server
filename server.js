@@ -100,6 +100,10 @@ io.on("connection", (socket) => {
     });
 
     socket.on("position", (pos) => {
-        console.log(connected[connected.indexOf(socket)]);
+        connected.forEach((connection) => {
+            if (connection.socket == socket) {
+                connection.pos = pos;
+            }
+        });
     });
 });
