@@ -47,18 +47,6 @@ app.get("/generate/:key", (req, res) => {
     }
 });
 
-app.post("/register", (req, res) => {
-    console.log(
-        chalk.yellow("[API Server]") + " received registration request. " + chalk.magenta("User: " + req.body.username)
-    );
-    db.registerUser(req.body.username.toLowerCase(), req.body.password, (result, msg) => {
-        res.send({
-            result: result,
-            msg: msg,
-        });
-    });
-});
-
 const server = app.listen(API_PORT, () => {
     console.log(chalk.green("[API Server]") + " online on port: " + chalk.blue(API_PORT));
 });
@@ -103,6 +91,18 @@ io.on("connection", (socket) => {
                 result: result,
                 auth_token: auth_token,
                 username: data.username,
+            });
+        });
+    });
+
+    socket.on("register", (data) => {
+        console.log(
+            chalk.yellow("[API Server]") + " received registration request. " + chalk.magenta("User: " + data.username)
+        );
+        db.registerUser(data.username.toLowerCase(), data.password, (result, msg) => {
+            socket.emit("register_request", {
+                result: result,
+                msg: msg,
             });
         });
     });
