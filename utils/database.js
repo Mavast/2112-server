@@ -39,10 +39,12 @@ class Database {
                 size: Math.random() * 8,
             };
 
-            let a = planets[i - 1].x - planet.x;
-            let b = planets[i - 1].y - planet.y;
+            if (planets.length) {
+                let a = planets[i - 1].x - planet.x;
+                let b = planets[i - 1].y - planet.y;
 
-            dist = Math.sqrt(a * a + b * b);
+                dist = Math.sqrt(a * a + b * b);
+            }
 
             if (dist >= 15000) {
                 planets.push(planet);
