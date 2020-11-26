@@ -70,6 +70,7 @@ io.on("connection", (socket) => {
             y: 0,
         },
         angle: 0,
+        username: "Logging in...",
     });
 
     socket.on("disconnect", () => {
@@ -92,6 +93,14 @@ io.on("connection", (socket) => {
                 auth_token: auth_token,
                 username: data.username,
             });
+
+            if (result) {
+                connected.forEach((connection) => {
+                    if (connection.id == socket.id) {
+                        connection.username = data.username;
+                    }
+                });
+            }
         });
     });
 
@@ -133,6 +142,7 @@ io.on("connection", (socket) => {
                             x: connection.pos.x,
                             y: connection.pos.y,
                             angle: connection.angle,
+                            username: connection.username,
                         });
                     }
                 });
