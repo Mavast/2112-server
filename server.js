@@ -122,7 +122,9 @@ io.on("connection", (socket) => {
     });
 
     socket.on("get_players", (data) => {
-        if (db.auth(data.USERNAME, data.AUTHKEY)) {
+        let auth = db.auth(data.USERNAME, data.AUTHKEY);
+        console.log(auth);
+        if (auth) {
             const players = [];
             connected.forEach((connection) => {
                 if (connection.id != socket.id) {
