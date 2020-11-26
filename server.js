@@ -116,6 +116,7 @@ io.on("connection", (socket) => {
                 players.push({
                     x: connection.pos.x,
                     y: connection.pos.y,
+                    angle: connection.angle,
                 });
             }
         });
