@@ -4,8 +4,6 @@ const chalk = require("chalk");
 const config = require("./config.json");
 const secret = require("./secret.json");
 
-const WebSocket = require("ws");
-
 const app = express();
 app.use(bodyParser.json());
 
@@ -13,53 +11,14 @@ var cors = require("cors");
 app.use(cors());
 
 const API_PORT = process.env.API_PORT || 3000;
-const WS_PORT = process.env.WS_PORT || 7777;
-
-const ws = new WebSocket.Server({ port: WS_PORT });
 
 const DB = require("./utils/database.js");
 const db = new DB();
 
-const eventTemplates = [
-    {
-        type: "ping",
-        run: (ws) => {
-            ws.send("Pong!");
-        },
-    },
-    {
-        type: "get_queue",
-        run: (ws, data) => {
-            db.query(`SELECT * FROM chunks`, (err, results, fields) => {
-                // console.log(`get_queue chunks: ${results}`);
-                const toRender = [];
-                //check if the chunk is close enough to the player to be rendered
-                const chunkPos = {
-                    chunk_x: (data.x - (data.x % config.world_options.chunkWidth)) / config.world_options.chunkWidth,
-                    chunk_y: (data.y - (data.y % config.world_options.chunkHeight)) / config.world_options.chunkHeight,
-                };
+var io = require("socket.io")(app);
 
-                results.forEach((chunk) => {
-                    if (chunk.x == chunkPos.chunk_x && chunk.y == chunkPos.chunk_y) {
-                        toRender.push(chunk);
-                    }
-                });
-
-                ws.send(
-                    JSON.stringify({
-                        type: "render_queue",
-                        data: toRender,
-                    })
-                );
-            });
-        },
-    },
-];
-
-const events = [];
-
-eventTemplates.forEach((template) => {
-    events.push(template);
+io.on("connection", (socket) => {
+    console.log("a user connected");
 });
 
 const isJsonString = (str) => {
@@ -70,22 +29,6 @@ const isJsonString = (str) => {
     }
     return true;
 };
-
-ws.on("connection", function connection(ws) {
-    ws.on("message", function incoming(message) {
-        //Parse message
-        if (isJsonString(message)) {
-            const parsed = JSON.parse(message);
-            console.log("Attempting to run event: " + parsed.type);
-            //loop through all events to find if it applies
-            events.forEach((event) => {
-                if (event.type === parsed.type) {
-                    event.run(ws, parsed.data);
-                }
-            });
-        }
-    });
-});
 
 app.get("/", (req, res) => {
     res.sendStatus(200);
@@ -138,5 +81,4 @@ app.post("/authenticate", (req, res) => {
 
 app.listen(API_PORT, () => {
     console.log(chalk.green("[API Server]") + " online on port: " + chalk.blue(API_PORT));
-    console.log(chalk.green("[WebSocket Server]") + " online on port: " + chalk.blue(WS_PORT));
 });
