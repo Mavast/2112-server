@@ -15,12 +15,6 @@ const API_PORT = process.env.API_PORT || 3000;
 const DB = require("./utils/database.js");
 const db = new DB();
 
-var io = require("socket.io")(app);
-
-io.on("connection", (socket) => {
-    console.log("a user connected");
-});
-
 const isJsonString = (str) => {
     try {
         JSON.parse(str);
@@ -81,4 +75,10 @@ app.post("/authenticate", (req, res) => {
 
 app.listen(API_PORT, () => {
     console.log(chalk.green("[API Server]") + " online on port: " + chalk.blue(API_PORT));
+});
+
+var io = require("socket.io")(app);
+
+io.on("connection", (socket) => {
+    console.log("a user connected");
 });
