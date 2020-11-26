@@ -5,7 +5,6 @@ const config = require("./config.json");
 const secret = require("./secret.json");
 
 const app = express();
-app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 var cors = require("cors");
@@ -60,20 +59,6 @@ app.post("/register", (req, res) => {
     });
 });
 
-app.post("/authenticate", (req, res) => {
-    console.log(
-        chalk.yellow("[API Server]") +
-            " received authentication request. " +
-            chalk.magenta("User: " + req.body.username)
-    );
-    db.authenticateUser(req.body.username, req.body.password, (result, auth_token) => {
-        res.send({
-            result: result,
-            auth_token: auth_token,
-        });
-    });
-});
-
 const server = app.listen(API_PORT, () => {
     console.log(chalk.green("[API Server]") + " online on port: " + chalk.blue(API_PORT));
 });
@@ -105,6 +90,21 @@ io.on("connection", (socket) => {
                 connected.splice(i, 1);
             }
         }
+    });
+
+    socket.on("login", (data) => {
+        console.log(
+            chalk.yellow("[API Server]") +
+                " received authentication request. " +
+                chalk.magenta("User: " + data.username)
+        );
+        db.authenticateUser(data.username, data.password, (result, auth_token) => {
+            socket.emit("login_request", {
+                result: result,
+                auth_token: auth_token,
+                username: data.username,
+            });
+        });
     });
 
     socket.on("position", (data) => {
