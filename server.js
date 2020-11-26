@@ -73,11 +73,11 @@ app.post("/authenticate", (req, res) => {
     });
 });
 
-app.listen(API_PORT, () => {
+const server = app.listen(API_PORT, () => {
     console.log(chalk.green("[API Server]") + " online on port: " + chalk.blue(API_PORT));
 });
 
-var io = require("socket.io")(app);
+var io = require("socket.io")(server);
 
 io.on("connection", (socket) => {
     console.log("a user connected");
