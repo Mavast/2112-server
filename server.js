@@ -108,37 +108,39 @@ io.on("connection", (socket) => {
     });
 
     socket.on("position", (data) => {
-        if (db.auth(data.USERNAME, data.AUTHKEY)) {
-            connected.forEach((connection) => {
-                if (connection.id == socket.id) {
-                    connection.pos = {
-                        x: data.x,
-                        y: data.y,
-                    };
-                    connection.angle = data.angle;
-                }
-            });
-        }
+        db.auth(data.USERNAME, data.AUTHKEY, (auth) => {
+            if (auth) {
+                connected.forEach((connection) => {
+                    if (connection.id == socket.id) {
+                        connection.pos = {
+                            x: data.x,
+                            y: data.y,
+                        };
+                        connection.angle = data.angle;
+                    }
+                });
+            }
+        });
     });
 
     socket.on("get_players", (data) => {
-        let auth = db.auth(data.USERNAME, data.AUTHKEY);
-        console.log(auth);
-        if (auth) {
-            const players = [];
-            connected.forEach((connection) => {
-                if (connection.id != socket.id) {
-                    players.push({
-                        x: connection.pos.x,
-                        y: connection.pos.y,
-                        angle: connection.angle,
-                    });
-                }
-            });
+        db.auth(data.USERNAME, data.AUTHKEY, (auth) => {
+            if (auth) {
+                const players = [];
+                connected.forEach((connection) => {
+                    if (connection.id != socket.id) {
+                        players.push({
+                            x: connection.pos.x,
+                            y: connection.pos.y,
+                            angle: connection.angle,
+                        });
+                    }
+                });
 
-            console.log("Players: " + JSON.stringify(players));
+                console.log("Players: " + JSON.stringify(players));
 
-            socket.emit("players", players);
-        }
+                socket.emit("players", players);
+            }
+        });
     });
 });

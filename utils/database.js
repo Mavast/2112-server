@@ -106,7 +106,7 @@ class Database {
         });
     }
 
-    auth(username, authkey) {
+    auth(username, authkey, callback) {
         const uname = username.toLowerCase();
         this.query(`SELECT auth_token FROM users WHERE username = '${uname}'`, (err, results, fields) => {
             if (err) console.error(err);
@@ -117,9 +117,9 @@ class Database {
             // console.log(parsed);
             // console.log(parsed.auth_token + " == " + authkey);
             if (parsed.auth_token == authkey) {
-                return true;
+                callback(true);
             } else {
-                return false;
+                callback(false);
             }
         });
     }
