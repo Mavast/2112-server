@@ -36,9 +36,12 @@ class Database {
                 texture: Math.floor(Math.random() * 10),
             };
 
-            this.query(`INSERT INTO planets (x, y) VALUES (${planet.x}, ${planet.y})`, (err, results, fields) => {
-                if (err) throw err;
-            });
+            this.query(
+                `INSERT INTO planets (x, y, texture) VALUES (${planet.x}, ${planet.y}, ${planet.texture})`,
+                (err, results, fields) => {
+                    if (err) throw err;
+                }
+            );
         }
 
         console.log(chalk.green("[Database]") + " generated planets");
