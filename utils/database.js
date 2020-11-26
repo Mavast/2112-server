@@ -48,7 +48,7 @@ class Database {
                 dist = Math.sqrt(a * a + b * b);
             }
 
-            if (dist >= 15000) {
+            if (dist >= 1500) {
                 planets.push(planet);
             }
         }
