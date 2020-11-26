@@ -49,7 +49,7 @@ class Database {
                 dist = Math.abs(Math.sqrt(a * a + b * b));
             }
 
-            if (dist >= 1000) {
+            if (dist >= 4500) {
                 this.query(
                     `INSERT INTO planets (x, y, texture, size) VALUES (${planet.x}, ${planet.y}, ${planet.texture}, ${planet.size})`,
                     (err, results, fields) => {
