@@ -77,8 +77,13 @@ const server = app.listen(API_PORT, () => {
     console.log(chalk.green("[API Server]") + " online on port: " + chalk.blue(API_PORT));
 });
 
-var io = require("socket.io")(server);
-io.origins("http://mavast.xyz");
+var io = require("socket.io")(server, {
+    cors: {
+        origin: "http://mavast.xyz",
+        methods: ["GET", "POST"],
+        credentials: true,
+    },
+});
 
 io.on("connection", (socket) => {
     console.log("a user connected");
