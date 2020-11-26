@@ -5,6 +5,7 @@ const config = require("./config.json");
 const secret = require("./secret.json");
 
 const app = express();
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 var cors = require("cors");
