@@ -78,7 +78,7 @@ const server = app.listen(API_PORT, () => {
 });
 
 var io = require("socket.io")(server);
-io.set("origins", "http://mavast.xyz");
+io.origins("http://mavast.xyz");
 
 io.on("connection", (socket) => {
     console.log("a user connected");
