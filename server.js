@@ -86,6 +86,7 @@ var io = require("socket.io")(server, {
 });
 
 const connected = [];
+const players = [];
 
 io.on("connection", (socket) => {
     connected.push({
@@ -95,6 +96,7 @@ io.on("connection", (socket) => {
             y: 0,
         },
     });
+
     socket.on("disconnect", () => {
         connected.splice(connected.indexOf(socket), 1);
     });
@@ -108,6 +110,16 @@ io.on("connection", (socket) => {
     });
 
     socket.on("get_players", () => {
-        socket.emit("players", connected);
+        const players = [];
+        connected.forEach((connection) => {
+            if (connection.socket != socket) {
+                players.push({
+                    x: connection.pos.x,
+                    y: connection.pos.y,
+                });
+            }
+        });
+
+        socket.emit("players", players);
     });
 });
