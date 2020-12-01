@@ -174,6 +174,7 @@ io.on("connection", (socket) => {
                 db.query(`SELECT * FROM ships WHERE username = '${data.username}'`, (err, results) => {
                     if (err) console.error(err);
                     if (results) {
+                        console.log(results);
                         let raw = JSON.stringify(results[0]);
                         let parsed = JSON.parse(raw);
 
