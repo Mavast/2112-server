@@ -36,7 +36,7 @@ class Database {
                 x: Math.floor(Math.random() * options.worldWidth),
                 y: Math.floor(Math.random() * options.worldHeight),
                 texture: Math.floor(Math.random() * 10),
-                size: 1 + Math.random() * 8,
+                size: 1 + Math.random() * 5,
             };
 
             this.query(
