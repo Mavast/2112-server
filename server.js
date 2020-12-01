@@ -144,7 +144,20 @@ io.on("connection", (socket) => {
     socket.on("save", (data) => {
         db.auth(data.USERNAME, data.AUTHKEY, (auth) => {
             if (auth) {
-                // db.query(``)
+                db.query(
+                    "UPDATE ships SET x = ${data.x}, y = ${data.y}, fuel = ${data.fuel} WHERE username = ${data.USERNAME}",
+                    (err, results) => {
+                        if (err) console.error(err);
+                    }
+                );
+            }
+        });
+    });
+
+    socket.on("refuel", (data) => {
+        db.auth(data.USERNAME, data.AUTHKEY, (auth) => {
+            if (auth) {
+                //calculate how much fuel is needed and how much fuel player can afford
             }
         });
     });
