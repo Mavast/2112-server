@@ -140,6 +140,27 @@ class Database {
             }
         });
     }
+
+    wipe() {
+        this.query("DROP TABLE users", (err, results) => {
+            if (err) console.error(err);
+        });
+        this.query("DROP TABLE ships", (err, results) => {
+            if (err) console.error(err);
+        });
+        this.query(
+            `CREATE TABLE users (username VARCHAR(50), password VARCHAR(255), auth_token VARCHAR(20))`,
+            (err, results) => {
+                if (err) console.error(err);
+            }
+        );
+        this.query(
+            `CREATE TABLE ships (x INT, y INT, angle FLOAT, fuel FLOAT, username VARCHAR(50))`,
+            (err, results) => {
+                if (err) console.error(err);
+            }
+        );
+    }
 }
 
 module.exports = Database;

@@ -47,6 +47,15 @@ app.get("/generate/:key", (req, res) => {
     }
 });
 
+app.get("/wipe/:key", (req, res) => {
+    if (req.params.key == secret.key) {
+        db.wipe();
+        res.sendStatus(200);
+    } else {
+        res.sendStatus(403);
+    }
+});
+
 const server = app.listen(API_PORT, () => {
     console.log(chalk.green("[API Server]") + " online on port: " + chalk.blue(API_PORT));
 });
@@ -116,36 +125,51 @@ io.on("connection", (socket) => {
         });
     });
 
-    socket.on("position", (data) => {
-        db.auth(data.USERNAME, data.AUTHKEY, (auth) => {
-            if (auth) {
-                connected.forEach((connection) => {
-                    if (connection.id == socket.id) {
-                        //check if new position isn't too far from old position
-                        let a = connection.pos.x - data.x;
-                        let b = connection.pos.y - data.y;
+    // socket.on("position", (data) => {
+    //     db.auth(data.USERNAME, data.AUTHKEY, (auth) => {
+    //         if (auth) {
+    //             connected.forEach((connection) => {
+    //                 if (connection.id == socket.id) {
+    //                     //check if new position isn't too far from old position
+    //                     let a = connection.pos.x - data.x;
+    //                     let b = connection.pos.y - data.y;
 
-                        let dist = Math.abs(Math.sqrt(a * a + b * b));
-                        if (dist < 50) {
-                            connection.pos = {
-                                x: data.x,
-                                y: data.y,
-                            };
-                            connection.angle = data.angle;
-                        } else {
-                            socket.emit("error", "Position has changed too much since last ping.");
-                        }
-                    }
-                });
-            }
-        });
-    });
+    //                     let dist = Math.abs(Math.sqrt(a * a + b * b));
+    //                     if (dist < 50) {
+    //                         connection.pos = {
+    //                             x: data.x,
+    //                             y: data.y,
+    //                         };
+    //                         connection.angle = data.angle;
+    //                     } else {
+    //                         socket.emit("error", "Position has changed too much since last ping.");
+    //                     }
+    //                 }
+    //             });
+    //         }
+    //     });
+    // });
 
     socket.on("save", (data) => {
         db.auth(data.USERNAME, data.AUTHKEY, (auth) => {
             if (auth) {
+                // check if new position isn't too far from old position
+                let a = connection.pos.x - data.x;
+                let b = connection.pos.y - data.y;
+
+                let dist = Math.abs(Math.sqrt(a * a + b * b));
+                if (dist < 50) {
+                    connection.pos = {
+                        x: data.x,
+                        y: data.y,
+                    };
+                    connection.angle = data.angle;
+                } else {
+                    socket.emit("error", "Position has changed too much since last ping.");
+                }
+
                 db.query(
-                    "UPDATE ships SET x = ${data.x}, y = ${data.y}, fuel = ${data.fuel} WHERE username = ${data.USERNAME}",
+                    "UPDATE ships SET x = ${data.x}, y = ${data.y}, angle = ${data.angle}, fuel = ${data.fuel} WHERE username = '${data.USERNAME}'",
                     (err, results) => {
                         if (err) console.error(err);
                     }
