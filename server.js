@@ -172,7 +172,6 @@ io.on("connection", (socket) => {
     // });
 
     socket.on("save", (data) => {
-        console.log("Got save event: " + JSON.stringify(data));
         db.auth(data.USERNAME, data.AUTHKEY, (auth) => {
             if (auth) {
                 db.query(`SELECT * FROM ships WHERE username = '${data.username}'`, (err, results) => {
@@ -181,6 +180,7 @@ io.on("connection", (socket) => {
                         console.log(results);
                         let raw = JSON.stringify(results[0]);
                         let parsed = JSON.parse(raw);
+                        console.log("Found user: " + JSON.stringify(parsed));
 
                         let a = parsed.x - data.x;
                         let b = parsed.y - data.y;
