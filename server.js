@@ -97,10 +97,6 @@ io.on("connection", (socket) => {
                 chalk.magenta("User: " + data.username)
         );
         db.authenticateUser(data.username, data.password, (result, auth_token) => {
-            let x = 125000;
-            let y = 125000;
-            let angle = 0;
-
             if (result) {
                 db.query(`SELECT * FROM ships WHERE username = '${data.username}'`, (err, results) => {
                     if (err) console.error(err);
@@ -108,21 +104,23 @@ io.on("connection", (socket) => {
                     if (results) {
                         let raw = JSON.stringify(results[0]);
                         let parsed = JSON.parse(raw);
-                        x = parsed.x;
-                        y = parsed.y;
-                        angle = parsed.angle;
+                        let x = parsed.x;
+                        let y = parsed.y;
+                        let angle = parsed.angle;
+                        let fuel = parsed.fuel;
+
+                        socket.emit("login_request", {
+                            result: result,
+                            auth_token: auth_token,
+                            username: data.username,
+                            x: x,
+                            y: y,
+                            angle: angle,
+                            fuel: fuel,
+                        });
                     }
                 });
             }
-
-            socket.emit("login_request", {
-                result: result,
-                auth_token: auth_token,
-                username: data.username,
-                x: x,
-                y: y,
-                angle: angle,
-            });
 
             if (result) {
                 connected.forEach((connection) => {
