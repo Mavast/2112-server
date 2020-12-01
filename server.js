@@ -171,20 +171,17 @@ io.on("connection", (socket) => {
     socket.on("save", (data) => {
         db.auth(data.USERNAME, data.AUTHKEY, (auth) => {
             if (auth) {
-                connected.forEach((connection) => {
-                    if (connection.id == socket.id) {
-                        // check if new position isn't too far from old position
-                        let a = connection.pos.x - data.x;
-                        let b = connection.pos.y - data.y;
+                db.query(`SELECT * FROM ships WHERE username = '${data.username}'`, (err, results) => {
+                    if (err) console.error(err);
+                    if (results) {
+                        let raw = JSON.stringify(results[0]);
+                        let parsed = JSON.parse(raw);
+
+                        let a = parsed.x - data.x;
+                        let b = parsed.y - data.y;
 
                         let dist = Math.abs(Math.sqrt(a * a + b * b));
-                        if (dist < 50) {
-                            connection.pos = {
-                                x: data.x,
-                                y: data.y,
-                            };
-                            connection.angle = data.angle;
-                        } else {
+                        if (dist > 50) {
                             socket.emit("error", "Position has changed too much since last ping.");
                         }
 
