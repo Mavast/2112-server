@@ -176,8 +176,9 @@ io.on("connection", (socket) => {
             if (auth) {
                 db.query(`SELECT * FROM ships WHERE username = '${data.username}'`, (err, results) => {
                     if (err) console.error(err);
+                    console.log("ATTEMPTING SAVE");
                     if (results[0]) {
-                        console.log(results);
+                        console.log(results[0]);
                         let raw = JSON.stringify(results[0]);
                         let parsed = JSON.parse(raw);
                         console.log("Found user: " + JSON.stringify(parsed));
