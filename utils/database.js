@@ -73,7 +73,7 @@ class Database {
                 }
             );
             this.query(
-                `INSERT INTO ships (x, y, fuel, username) VALUES (125000, 125000, 100, '${username}')`,
+                `INSERT INTO ships (x, y, angle, fuel, username) VALUES (125000, 125000, 0, 100, '${username}')`,
                 (err, results, fields) => {
                     if (err) console.error(err);
                 }

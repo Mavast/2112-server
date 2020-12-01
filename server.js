@@ -119,6 +119,9 @@ io.on("connection", (socket) => {
                 result: result,
                 auth_token: auth_token,
                 username: data.username,
+                x: x,
+                y: y,
+                angle: angle,
             });
 
             if (result) {
@@ -173,7 +176,7 @@ io.on("connection", (socket) => {
             if (auth) {
                 db.query(`SELECT * FROM ships WHERE username = '${data.username}'`, (err, results) => {
                     if (err) console.error(err);
-                    if (results) {
+                    if (results.length) {
                         console.log(results);
                         let raw = JSON.stringify(results[0]);
                         let parsed = JSON.parse(raw);
