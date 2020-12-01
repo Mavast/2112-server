@@ -201,14 +201,6 @@ io.on("connection", (socket) => {
         });
     });
 
-    socket.on("refuel", (data) => {
-        db.auth(data.USERNAME, data.AUTHKEY, (auth) => {
-            if (auth) {
-                //calculate how much fuel is needed and how much fuel player can afford
-            }
-        });
-    });
-
     socket.on("get_players", (data) => {
         db.auth(data.USERNAME, data.AUTHKEY, (auth) => {
             if (auth) {
@@ -227,6 +219,45 @@ io.on("connection", (socket) => {
                 // console.log("Players: " + JSON.stringify(players));
 
                 socket.emit("players", players);
+            }
+        });
+    });
+
+    socket.on("refuel", (data) => {
+        db.auth(data.USERNAME, data.AUTHKEY, (auth) => {
+            if (auth) {
+                db.query(`SELECT * FROM ships WHERE username = '${data.USERNAME}'`, (err, results) => {
+                    if (results) {
+                        let raw = JSON.stringify(results[0]);
+                        let parsed = JSON.parse(raw);
+
+                        let fuelNeeded = 100 - parsed.fuel;
+                        let moneyNeeded = fuelNeeded * config.economy.fuelPrice;
+
+                        if (parsed.balance >= moneyNeeded) {
+                            //refuel fully
+                            db.query(
+                                `UPDATE ships SET fuel = 100, balance = ${
+                                    parsed.balance - moneyNeeded
+                                } WHERE username = '${data.USERNAME}'`,
+                                (err, results) => {
+                                    if (err) console.error(err);
+                                }
+                            );
+                        } else {
+                            //refuel partially
+                            let fuelPossible = parsed.balance / config.economy.fuelPrice;
+                            db.query(
+                                `UPDATE ships SET fuel = ${parsed.fuel + fuelPossible}, balance = ${
+                                    parsed.balance - fuelPossible * config.economy.fuelPrice
+                                } WHERE username = '${data.USERNAME}'`,
+                                (err, results) => {
+                                    if (err) console.error(err);
+                                }
+                            );
+                        }
+                    }
+                });
             }
         });
     });
