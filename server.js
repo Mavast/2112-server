@@ -153,27 +153,31 @@ io.on("connection", (socket) => {
     socket.on("save", (data) => {
         db.auth(data.USERNAME, data.AUTHKEY, (auth) => {
             if (auth) {
-                // check if new position isn't too far from old position
-                let a = connection.pos.x - data.x;
-                let b = connection.pos.y - data.y;
+                connected.forEach((connection) => {
+                    if (connection.id == socket.id) {
+                        // check if new position isn't too far from old position
+                        let a = connection.pos.x - data.x;
+                        let b = connection.pos.y - data.y;
 
-                let dist = Math.abs(Math.sqrt(a * a + b * b));
-                if (dist < 50) {
-                    connection.pos = {
-                        x: data.x,
-                        y: data.y,
-                    };
-                    connection.angle = data.angle;
-                } else {
-                    socket.emit("error", "Position has changed too much since last ping.");
-                }
+                        let dist = Math.abs(Math.sqrt(a * a + b * b));
+                        if (dist < 50) {
+                            connection.pos = {
+                                x: data.x,
+                                y: data.y,
+                            };
+                            connection.angle = data.angle;
+                        } else {
+                            socket.emit("error", "Position has changed too much since last ping.");
+                        }
 
-                db.query(
-                    "UPDATE ships SET x = ${data.x}, y = ${data.y}, angle = ${data.angle}, fuel = ${data.fuel} WHERE username = '${data.USERNAME}'",
-                    (err, results) => {
-                        if (err) console.error(err);
+                        db.query(
+                            "UPDATE ships SET x = ${data.x}, y = ${data.y}, angle = ${data.angle}, fuel = ${data.fuel} WHERE username = '${data.USERNAME}'",
+                            (err, results) => {
+                                if (err) console.error(err);
+                            }
+                        );
                     }
-                );
+                });
             }
         });
     });
