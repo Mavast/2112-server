@@ -192,7 +192,7 @@ io.on("connection", (socket) => {
                         }
 
                         db.query(
-                            "UPDATE ships SET x = ${data.x}, y = ${data.y}, angle = ${data.angle}, fuel = ${data.fuel} WHERE username = '${data.USERNAME}'",
+                            `UPDATE ships SET x = ${data.x}, y = ${data.y}, angle = ${data.angle}, fuel = ${data.fuel} WHERE username = '${data.USERNAME}'`,
                             (err, results) => {
                                 if (err) console.error(err);
                             }
