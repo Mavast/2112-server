@@ -172,6 +172,7 @@ io.on("connection", (socket) => {
     // });
 
     socket.on("save", (data) => {
+        console.log("Got save event: " + JSON.stringify(data));
         db.auth(data.USERNAME, data.AUTHKEY, (auth) => {
             if (auth) {
                 db.query(`SELECT * FROM ships WHERE username = '${data.username}'`, (err, results) => {
