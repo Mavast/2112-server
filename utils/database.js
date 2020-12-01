@@ -25,9 +25,12 @@ class Database {
         this.query(`DROP TABLE planets`, (err, results, fields) => {
             if (err) throw err;
         });
-        this.query(`CREATE TABLE planets (x INT, y INT, texture INT, size FLOAT)`, (err, results, fields) => {
-            if (err) throw err;
-        });
+        this.query(
+            `CREATE TABLE planets (x INT, y INT, texture INT, size FLOAT, type VARCHAR(40))`,
+            (err, results, fields) => {
+                if (err) throw err;
+            }
+        );
 
         let planets = [];
 
@@ -37,10 +40,11 @@ class Database {
                 y: Math.floor(Math.random() * options.worldHeight),
                 texture: Math.floor(Math.random() * 10),
                 size: 1 + Math.random() * 5,
+                type: options.types[Math.floor(Math.random() * options.types.length)],
             };
 
             this.query(
-                `INSERT INTO planets (x, y, texture, size) VALUES (${planet.x}, ${planet.y}, ${planet.texture}, ${planet.size})`,
+                `INSERT INTO planets (x, y, texture, size, type) VALUES (${planet.x}, ${planet.y}, ${planet.texture}, ${planet.size}, ${planet.type})`,
                 (err, results, fields) => {
                     if (err) throw err;
                 }

@@ -1,6 +1,7 @@
 {
     "world_options": {
         "worldWidth": 250000,
-        "worldHeight": 250000
+        "worldHeight": 250000,
+        "types": ["fuel"]
     }
 }
