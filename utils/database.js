@@ -44,7 +44,7 @@ class Database {
             };
 
             this.query(
-                `INSERT INTO planets (x, y, texture, size, type) VALUES (${planet.x}, ${planet.y}, ${planet.texture}, ${planet.size}, ${planet.type})`,
+                `INSERT INTO planets (x, y, texture, size, type) VALUES (${planet.x}, ${planet.y}, ${planet.texture}, ${planet.size}, '${planet.type}')`,
                 (err, results, fields) => {
                     if (err) throw err;
                 }
