@@ -31,7 +31,7 @@ class Database {
 
         let planets = [];
 
-        for (let i = 0; i < 1500; i++) {
+        for (let i = 0; i < 500; i++) {
             const planet = {
                 x: Math.floor(Math.random() * options.worldWidth),
                 y: Math.floor(Math.random() * options.worldHeight),
