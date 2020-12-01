@@ -104,12 +104,13 @@ io.on("connection", (socket) => {
             if (result) {
                 db.query(`SELECT * FROM ships WHERE username = '${data.username}'`, (err, results) => {
                     if (err) console.error(err);
+                    console.log(results);
                     if (results) {
-                        let raw = JSON.stringify(results);
+                        let raw = JSON.stringify(results[0]);
                         let parsed = JSON.parse(raw);
-                        x = parsed[0].x;
-                        y = parsed[0].y;
-                        angle = parsed[0].angle;
+                        x = parsed.x;
+                        y = parsed.y;
+                        angle = parsed.angle;
                     }
                 });
             }
@@ -222,7 +223,7 @@ io.on("connection", (socket) => {
                     }
                 });
 
-                console.log("Players: " + JSON.stringify(players));
+                // console.log("Players: " + JSON.stringify(players));
 
                 socket.emit("players", players);
             }
