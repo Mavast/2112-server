@@ -141,6 +141,14 @@ io.on("connection", (socket) => {
         });
     });
 
+    socket.on("save", (data) => {
+        db.auth(data.USERNAME, data.AUTHKEY, (auth) => {
+            if (auth) {
+                // db.query(``)
+            }
+        });
+    });
+
     socket.on("get_players", (data) => {
         db.auth(data.USERNAME, data.AUTHKEY, (auth) => {
             if (auth) {
