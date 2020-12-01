@@ -174,14 +174,14 @@ io.on("connection", (socket) => {
     socket.on("save", (data) => {
         db.auth(data.USERNAME, data.AUTHKEY, (auth) => {
             if (auth) {
-                db.query(`SELECT * FROM ships WHERE username = '${data.username}'`, (err, results) => {
+                db.query(`SELECT * FROM ships WHERE username = '${data.USERNAME}'`, (err, results) => {
                     if (err) console.error(err);
-                    console.log("SAVE ATTEMPT: " + JSON.stringify(results));
+                    // console.log("SAVE ATTEMPT: " + JSON.stringify(results));
                     if (results[0]) {
-                        console.log(results[0]);
+                        // console.log(results[0]);
                         let raw = JSON.stringify(results[0]);
                         let parsed = JSON.parse(raw);
-                        console.log("Found user: " + JSON.stringify(parsed));
+                        // console.log("Found user: " + JSON.stringify(parsed));
 
                         let a = parsed.x - data.x;
                         let b = parsed.y - data.y;
